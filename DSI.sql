@@ -54,7 +54,7 @@ set DSI.`size range` = sizerangetable.Size
 WHERE DSI.`SIZE RANGE` IS NULL;
 
 
-Select * from DSI 			-- NOT IN DEMAND 
+Select * from DSI 			-- NOT IN DEMAND TABLE
 	where 
 		Color <>  'D' 
 	and Color  <> 'E' 
@@ -93,7 +93,7 @@ where
     and shape <> 'TR')    ;
     
 
-Delete from parcel where shape = 'AR' or shape = 'TR' or shape like '%bag%';
+Delete from parcel where shape = 'AR' or shape = 'TR' or shape like '%bag%';  -- VALUES NOT NEEDED FOR THE REPORT
 
 Update parcel
 set `Weight bucket` = concat('.',mid(`Lot Name`,14,2))
@@ -123,7 +123,9 @@ where `Weight Bucket` = '.6' and (type ='T1' or type = 'T2');
 Update parcel
 set `Weight Bucket` = '.75'
 where `Weight Bucket` = '.7' and (type ='T1' or type = 'T2');
-
+										--SUMMARY OF THE INVENTORY GROUPED BY SHAPE AND SIZE
+										-- USE COALESCE BECAUSE NULL MEANS 0 
+									
 select A.shape, A.size, coalesce(D.ParcelsQ,0) as `Parcels Inventory`, coalesce(B.quantity1,0) as `Jag Full`, coalesce(C.quantity2,0) as `Jag Signet` from overview A
 left join (select shape, `size range`,count(*) as Quantity1 from jag_full group by shape, `Size range`) B
 on A.shape = B.shape and A.size = B.`size range` 
@@ -133,4 +135,6 @@ Left Join (select shape,`weight bucket`,sum(qty) as ParcelsQ from parcel where `
 on A.shape = D.shape and A.size = D.`weight bucket` 
 group by A.shape,A.size;
 
+SELECT * FROM JAG_FULL;
+SELECT * FROM JAG_SIGNET
 
