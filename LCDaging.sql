@@ -19,7 +19,7 @@ UPDATE lcdaging 				-- FIND AND SETS THE PACK
 set `group` = 'Pack'
 	where `Lot Status` = 'pack';
     
-UPDATE lcdaging 				-- FIND AND SETS NULL
+UPDATE lcdaging 				-- FIND AND SETS FANCY
 set `group` = 'Fancy'
 	where 
 		Color <>  'D' 
@@ -99,7 +99,10 @@ select 					-- THE ENTIRE FILE COMPLETELY FORMATTED
 From LCDaging;
 
 Alter table LCDaging MOdify COLUMN `Purch Date` TEXT			-- CHANGES DATE BACK TO TEXT SO NO ISSUES OCCUR WHEN UPLOADING ANOTHER FILE;
-																-- THIS COMPLIES THE LIST OF ALL THE SUMMARIES 
+								       
+								       
+								       
+								       -- THIS COMPLIES THE LIST OF ALL THE SUMMARIES 
 Select ' ' , 'Fancy', '' 
 UNION
 Select  * from(
@@ -110,7 +113,7 @@ SELECT
 FROM LCDaging 
 where `Group` = 'Fancy'
 Group by `date group`
-ORDER BY min(`Purch date`) DESC ) as t
+ORDER BY min(`Purch date`) DESC ) as t                                  -- THIS IS SO THE SUMMARY TABLE HAS THE GROUP DATES IN ORDER AS THERES NO WAY TO ORDER '0-30' FOR EXAMPLE
 UNION
 Select 'TOTALS' , count(*), round(sum(`Cost Total`),2) From LCDaging where `Group` = 'Fancy' Group by `group`
 UNION
